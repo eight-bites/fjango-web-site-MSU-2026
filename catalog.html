@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Каталог растений{% endblock %}
+{% block kontent %}
+<h2>Каталог растений</h2>
+<p>Все растения учебной оранжереи.</p>
+
+<div class="setka">
+    {% for rastenie in rasteniya %}
+    <div class="kartochka">
+        <img class="ikonka" src="{% static rastenie.ikonka %}" alt="иконка растения">
+        <div>
+            <p><a href="{% url 'kartochka' rastenie.id %}"><strong>{{ rastenie.nazvanie }}</strong></a></p>
+            <p class="melkiy">{{ rastenie.latinskoe_nazvanie }}</p>
+            <p>Семейство: {{ rastenie.semeistvo.nazvanie }}</p>
+            <p class="melkiy">{% if rastenie.dostupno %}в наличии{% else %}нет в наличии{% endif %}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

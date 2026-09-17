@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Добавить растение{% endblock %}
+{% block kontent %}
+<h2>Добавить растение</h2>
+
+{% if forma.errors %}
+<div class="oshibka">
+    Проверьте форму: есть ошибки, запись не сохранена.
+    <ul class="spisok">
+        {% for pole, oshibki in forma.errors.items %}
+            {% for tekst in oshibki %}
+            <li>{{ tekst }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<form class="forma" method="post">
+    {% csrf_token %}
+    <p>
+        <label for="nazvanie">Название</label>
+        <input type="text" id="nazvanie" name="nazvanie" value="{{ forma.nazvanie.value|default:'' }}">
+        {% if forma.nazvanie.errors %}<span class="oshibka-pole">{{ forma.nazvanie.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <label for="latinskoe_nazvanie">Латинское название</label>
+        <input type="text" id="latinskoe_nazvanie" name="latinskoe_nazvanie" value="{{ forma.latinskoe_nazvanie.value|default:'' }}">
+        {% if forma.latinskoe_nazvanie.errors %}<span class="oshibka-pole">{{ forma.latinskoe_nazvanie.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <label for="visota_sm">Высота, см</label>
+        <input type="number" id="visota_sm" name="visota_sm" value="{{ forma.visota_sm.value|default:'' }}">
+        {% if forma.visota_sm.errors %}<span class="oshibka-pole">{{ forma.visota_sm.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <label for="data_pokupki">Дата покупки</label>
+        <input type="date" id="data_pokupki" name="data_pokupki" value="{{ forma.data_pokupki.value|default:'' }}">
+        {% if forma.data_pokupki.errors %}<span class="oshibka-pole">{{ forma.data_pokupki.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <label class="galochka">
+            <input type="checkbox" name="dostupno" {% if forma.dostupno.value %}checked{% endif %}>
+            В наличии
+        </label>
+    </p>
+    <p>
+        <label for="poliv">Полив</label>
+        <select id="poliv" name="poliv">
+            <option value="">— выберите —</option>
+            <option value="редко" {% if forma.poliv.value == 'редко' %}selected{% endif %}>редко</option>
+            <option value="умеренно" {% if forma.poliv.value == 'умеренно' %}selected{% endif %}>умеренно</option>
+            <option value="часто" {% if forma.poliv.value == 'часто' %}selected{% endif %}>часто</option>
+        </select>
+        {% if forma.poliv.errors %}<span class="oshibka-pole">{{ forma.poliv.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <label for="semeistvo_id">Семейство</label>
+        <select id="semeistvo_id" name="semeistvo_id">
+            <option value="">— выберите —</option>
+            {% for semeistvo in semeistva %}
+            <option value="{{ semeistvo.id }}" {% if forma.semeistvo_id.value|stringformat:"s" == semeistvo.id|stringformat:"s" %}selected{% endif %}>{{ semeistvo.nazvanie }}</option>
+            {% endfor %}
+        </select>
+        {% if forma.semeistvo_id.errors %}<span class="oshibka-pole">{{ forma.semeistvo_id.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <label>Метки</label>
+        {% for metka in metki %}
+        <label class="galochka">
+            <input type="checkbox" name="metki" value="{{ metka.id }}" {% if forma.metki.value and metka.id|stringformat:"s" in forma.metki.value %}checked{% endif %}>
+            {{ metka.nazvanie }}
+        </label>
+        {% endfor %}
+        {% if forma.metki.errors %}<span class="oshibka-pole">{{ forma.metki.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <label for="osveshenie">Освещение</label>
+        <input type="text" id="osveshenie" name="osveshenie" value="{{ forma.osveshenie.value|default:'' }}">
+        {% if forma.osveshenie.errors %}<span class="oshibka-pole">{{ forma.osveshenie.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <label for="temperatura">Температура, °C</label>
+        <input type="number" id="temperatura" name="temperatura" value="{{ forma.temperatura.value|default:'' }}">
+        {% if forma.temperatura.errors %}<span class="oshibka-pole">{{ forma.temperatura.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <label for="zametki">Заметки</label>
+        <textarea id="zametki" name="zametki">{{ forma.zametki.value|default:'' }}</textarea>
+        {% if forma.zametki.errors %}<span class="oshibka-pole">{{ forma.zametki.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <label for="data_proverki">Дата проверки</label>
+        <input type="date" id="data_proverki" name="data_proverki" value="{{ forma.data_proverki.value|default:'' }}">
+        {% if forma.data_proverki.errors %}<span class="oshibka-pole">{{ forma.data_proverki.errors.0 }}</span>{% endif %}
+    </p>
+    <p>
+        <button class="knopka" type="submit">Сохранить</button>
+    </p>
+</form>
+{% endblock %}

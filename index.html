@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Главная — учебная оранжерея{% endblock %}
+{% block kontent %}
+<h2>О проекте</h2>
+<p>Это учебный каталог комнатных растений оранжереи. Здесь можно посмотреть растения, их семейства, метки и паспорта ухода, а также добавить новую запись.</p>
+
+<h3>Разделы сайта</h3>
+<ul class="spisok">
+    <li><a href="{% url 'katalog' %}">Каталог растений</a></li>
+    <li><a href="{% url 'dobavit' %}">Добавить растение</a></li>
+</ul>
+
+<h3>Что сейчас есть в оранжерее</h3>
+<ol class="spisok-nomer">
+    {% for rastenie in rasteniya %}
+    <li>
+        <a href="{% url 'kartochka' rastenie.id %}">{{ rastenie.nazvanie }}</a>
+        ({{ rastenie.latinskoe_nazvanie }})
+    </li>
+    {% endfor %}
+</ol>
+
+<h3>Семейства растений</h3>
+<table class="tablitsa">
+    <tr>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Сколько растений</th>
+    </tr>
+    {% for semeistvo in semeistva %}
+    <tr>
+        <td>{{ semeistvo.nazvanie }}</td>
+        <td>{{ semeistvo.opisanie }}</td>
+        <td>{{ semeistvo.rasteniya.all|length }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

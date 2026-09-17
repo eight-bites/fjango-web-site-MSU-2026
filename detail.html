@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ rastenie.nazvanie }}{% endblock %}
+{% block kontent %}
+<h2>{{ rastenie.nazvanie }}</h2>
+<p><img class="ikonka" src="{% static rastenie.ikonka %}" alt=""> {{ rastenie.latinskoe_nazvanie }}</p>
+
+<h3>Данные растения</h3>
+<table class="tablitsa">
+    <tr><th>Поле</th><th>Значение</th></tr>
+    <tr><td>Название</td><td>{{ rastenie.nazvanie }}</td></tr>
+    <tr><td>Латинское название</td><td>{{ rastenie.latinskoe_nazvanie }}</td></tr>
+    <tr><td>Высота, см</td><td>{{ rastenie.visota_sm }}</td></tr>
+    <tr><td>Дата покупки</td><td>{{ rastenie.data_pokupki }}</td></tr>
+    <tr><td>В наличии</td><td>{% if rastenie.dostupno %}да{% else %}нет{% endif %}</td></tr>
+    <tr><td>Полив</td><td>{{ rastenie.poliv }}</td></tr>
+</table>
+
+<h3>Семейство</h3>
+<p><strong>{{ rastenie.semeistvo.nazvanie }}</strong></p>
+<p>{{ rastenie.semeistvo.opisanie }}</p>
+
+<h3>Паспорт ухода</h3>
+{% if rastenie.pasport %}
+<p>Освещение: {{ rastenie.pasport.osveshenie }}</p>
+<p>Температура: {{ rastenie.pasport.temperatura }} °C</p>
+<p>Заметки: {{ rastenie.pasport.zametki }}</p>
+<p>Дата проверки: {{ rastenie.pasport.data_proverki }}</p>
+{% else %}
+<p>Паспорт ухода не заполнен.</p>
+{% endif %}
+
+<h3>Метки</h3>
+{% if rastenie.metki.all %}
+<ul class="spisok">
+    {% for metka in rastenie.metki.all %}
+    <li>{{ metka.nazvanie }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Меток нет.</p>
+{% endif %}
+
+<form method="post" action="{% url 'udalit' rastenie.id %}" onsubmit="return confirm('Удалить это растение?');">
+    {% csrf_token %}
+    <button class="knopka knopka-udalit" type="submit">Удалить</button>
+</form>
+{% endblock %}
